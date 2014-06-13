@@ -155,12 +155,60 @@ class resource_calendar_class:
         file.write(file_string)
         file.close()
 
-return_values = import_working_time_csv_data("Neptune_Spear_Phase1_2014_04_23.csv")
-default_days = return_values[0]
-exception_times = return_values[1]
-project_start_date = datetime.date(year=2014, month=4, day=1)
-project_end_date = datetime.date(year=2014, month=5, day=31)
-kevin_calendar = resource_calendar_class(resource_name="Kevin", project_start_date=project_start_date,
-                                         project_end_date=project_end_date, default_days=default_days,
-                                         exception_times=exception_times)
-kevin_calendar.write_data_to_csv('kevin_data_2014_04_23.csv')
+class task_class:
+    """A class for using methods of comprehending tasks."""
+    def __init__(self, name, duration_string):
+        self.name = name
+        self.duration_string = duration_string
+        self.total_hours = self.translate_duration_string()
+    
+    def __repr__(self):
+        return_string = "{}: {}".format(self.name, self.total_hours)
+        return(return_string)
+    
+    def translate_duration_string(self):
+        """Translates self.duration_string into number of hours"""
+        split_string = self.duration_string.split('T')[1]
+        hours = float(split_string.split('H')[0])
+        split_string = split_string.split('H')[1]
+        minutes = float(split_string.split('M')[0])
+        split_string = split_string.split('M')[1]
+        seconds = float(split_string.split('S')[0])
+        total_hours = hours + minutes/60 + seconds/60/60
+        return(total_hours)
+        
+
+def import_task_duration_csv_data(filename):
+    """Imports task duration data for a project from a properly  formatted.csv file.
+        HACK assumes a very specific format for the csv file"""
+    
+    file = open(filename)
+    data_reader = csv.reader(file, delimiter=',')
+    
+    tasks = []
+    for row in data_reader:
+        task = task_class(name=row[0], duration_string=row[1])
+        tasks.append(task)
+    return(tasks)
+
+def write_task_data_to_csv(taks, filename):
+    """Writes the task data to a .csv file"""
+    file_string = ''
+    for task in tasks:
+        line = "{}, {}\n".format(task.name, task.total_hours)
+        file_string += line
+    file = open(filename, 'w')
+    file.write(file_string)
+    file.close()
+
+tasks = import_task_duration_csv_data('task_hours_2014_04_23.csv')
+write_task_data_to_csv(tasks, 'task_hours_complete_2014_04_23.csv')
+#return_values = import_working_time_csv_data("Neptune_Spear_Phase1_2014_04_23.csv")
+#default_days = return_values[0]
+#exception_times = return_values[1]
+#project_start_date = datetime.date(year=2014, month=4, day=1)
+#project_end_date = datetime.date(year=2014, month=5, day=31)
+#kevin_calendar = resource_calendar_class(resource_name="Kevin", project_start_date=project_start_date,
+#                                         project_end_date=project_end_date, default_days=default_days,
+#                                         exception_times=exception_times)
+#kevin_calendar.write_data_to_csv('kevin_data_2014_04_23.csv')
