@@ -87,6 +87,7 @@ def import_working_time_csv_data(filename):
             default_days[row[0]].append(time_range)
         
         elif is_default_day == False:
+            print(row[0])
             the_date = strip_date(row[0])
             if row[2] == '' or row[2] == '0':
                 row[2] = '0:00:00'
@@ -201,14 +202,14 @@ def write_task_data_to_csv(taks, filename):
     file.write(file_string)
     file.close()
 
-tasks = import_task_duration_csv_data('task_hours_2014_04_23.csv')
-write_task_data_to_csv(tasks, 'task_hours_complete_2014_04_23.csv')
-#return_values = import_working_time_csv_data("Neptune_Spear_Phase1_2014_04_23.csv")
-#default_days = return_values[0]
-#exception_times = return_values[1]
-#project_start_date = datetime.date(year=2014, month=4, day=1)
-#project_end_date = datetime.date(year=2014, month=5, day=31)
-#kevin_calendar = resource_calendar_class(resource_name="Kevin", project_start_date=project_start_date,
-#                                         project_end_date=project_end_date, default_days=default_days,
-#                                         exception_times=exception_times)
-#kevin_calendar.write_data_to_csv('kevin_data_2014_04_23.csv')
+#tasks = import_task_duration_csv_data('task_hours_2014_04_23.csv')
+#write_task_data_to_csv(tasks, 'task_hours_complete_2014_04_23.csv')
+return_values = import_working_time_csv_data("Kristine_Hours.csv")
+default_days = return_values[0]
+exception_times = return_values[1]
+project_start_date = datetime.date(year=2014, month=6, day=16)
+project_end_date = datetime.date(year=2014, month=8, day=24)
+kevin_calendar = resource_calendar_class(resource_name="Kristine", project_start_date=project_start_date,
+                                         project_end_date=project_end_date, default_days=default_days,
+                                         exception_times=exception_times)
+kevin_calendar.write_data_to_csv('kristine_data_2014_06_16.csv')
